@@ -1,7 +1,6 @@
 package br.com.tony.testes;
 
 import br.com.tony.configuration.dao.ClienteDAO;
-import br.com.tony.model.cliente.Cliente;
 
 public class TesteClientes {
     public static void main(String[] args) {
@@ -19,6 +18,7 @@ public class TesteClientes {
 //        System.out.println(Cliente.getClientes());
 
         System.out.println(ClienteDAO.getClienteByName("Leonardo Guedes"));
+        System.out.println(ClienteDAO.getClienteById(1));
 
     }
 }

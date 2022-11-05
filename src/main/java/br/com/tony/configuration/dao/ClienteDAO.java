@@ -3,7 +3,6 @@ package br.com.tony.configuration.dao;
 import br.com.tony.configuration.factory.ConnectionFactory;
 import br.com.tony.model.cliente.Cliente;
 
-import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -12,9 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteDAO {
-
+    /**
+     * CRUD clients
+     * @author tony
+     */
     public static void save(Cliente cliente) {
 
+        /**
+         * method to save clients in database
+         * @param reference to client
+         */
         String sql = "INSERT INTO clientes (nome, cpf, profissao, dataCadastro) VALUES (?, ?, ?, ?)";
 
         Connection conn = null;
@@ -48,6 +54,11 @@ public class ClienteDAO {
     }
 
     public static void update(Cliente cliente) {
+
+        /**
+         * Update information from clients on database
+         * @param reference to client
+         */
         String sql = "UPDATE clientes SET nome = ?, cpf = ?, profissao = ?, dataCadastro = ?" +
                 "WHERE id = ?";
 
@@ -84,6 +95,9 @@ public class ClienteDAO {
     }
 
     public static void deleteById(int id) {
+        /**
+         * Delete client from database using id as reference
+         */
         String sql = "DELETE FROM clientes WHERE id = ?";
 
         Connection conn = null;
@@ -115,6 +129,10 @@ public class ClienteDAO {
     }
 
     public static List<Cliente> getClientes() {
+        /**
+         * search for all client in database
+         * @return arraylist with all clients
+         */
         String sql = "SELECT * FROM clientes";
 
         List<Cliente> clientes = new ArrayList<>();
@@ -122,10 +140,12 @@ public class ClienteDAO {
         Connection conn = null;
         PreparedStatement pstm = null;
         ResultSet rset = null;
+
         try {
             conn = ConnectionFactory.createConnectionToMySQL();
             pstm = conn.prepareStatement(sql);
             rset = pstm.executeQuery();
+
             while (rset.next()) {
                 Cliente cliente = new Cliente(rset.getString("nome"), rset.getString("cpf"), rset.getString("profissao"));
                 cliente.setIdCliente(rset.getInt("id"));
@@ -153,6 +173,12 @@ public class ClienteDAO {
     }
 
     public static List<Cliente> getClienteByName(String nome) {
+        /**
+         * search for client in database using the client's name as reference
+         * @param name
+         * @return arraylist with clients by id
+         */
+
 
         String sql = "select * from clientes where nome = ? ";
 
@@ -193,6 +219,53 @@ public class ClienteDAO {
         }
 
         return cliente;
+    }
+
+    public static List<Cliente> getClienteById(int id){
+
+        /**
+         * search for client in database using the id as reference
+         * @param id
+         * @return arraylist with clients by id
+         */
+        String sql = "SELECT * FROM clientes WHERE id = ?";
+        List<Cliente> clients = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rset = null;
+
+        try {
+            conn = ConnectionFactory.createConnectionToMySQL();
+            pstm = conn.prepareStatement(sql);
+            pstm.setInt(1, id);
+            rset = pstm.executeQuery();
+            while (rset.next()) {
+                Cliente result = new Cliente(rset.getString("nome"), rset.getString("cpf"), rset.getString("profissao"));
+                result.setIdCliente(rset.getInt("id"));
+                result.setDataCadastro(rset.getDate("dataCadastro"));
+                clients.add(result);
+            }
+
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            try {
+                if (conn != null){
+                    conn.close();
+                }
+                if (pstm != null){
+                    pstm.close();
+                }
+                if (rset != null){
+                    rset.close();
+                }
+
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+        return clients;
     }
 }
 
