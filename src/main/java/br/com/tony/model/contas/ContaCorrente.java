@@ -1,16 +1,15 @@
 package br.com.tony.model.contas;
 
 import br.com.tony.excecoes.SaldoInsuficienteException;
-import br.com.tony.model.extra.CalculadorDeImpostos;
+import br.com.tony.model.cliente.Cliente;
 import br.com.tony.model.extra.Tributavel;
 
 import java.util.Comparator;
 
 public class ContaCorrente extends Conta implements Tributavel {
 
-    public ContaCorrente(int agencia, int conta) {
-            super(agencia, conta);
-            CalculadorDeImpostos impostos = new CalculadorDeImpostos();
+    public ContaCorrente(int agencia, int conta, Cliente titular) {
+            super(agencia, conta, titular);
             super.addContas(this);
             super.getContas().sort(Comparator.comparingInt(Conta::getNumeroDeConta));
     }
@@ -49,5 +48,11 @@ public class ContaCorrente extends Conta implements Tributavel {
     @Override
     public String toString() {
         return "Conta Corrente, " + super.toString();
+    }
+
+
+    public String getTipoDaConta() {
+        String tipo = "Conta Corrente";
+        return tipo;
     }
 }

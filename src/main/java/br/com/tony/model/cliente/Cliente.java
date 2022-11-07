@@ -18,6 +18,7 @@ public class Cliente {
     private String profissao;
     private Date dataCadastro;
 
+
     private static List<Cliente> totalClientes = new ArrayList<>();
 
 
@@ -26,8 +27,11 @@ public class Cliente {
         this.cpf = cpf;
         this.profissao = profissao;
         setDataCadastro(new Date());
-//        ClienteDAO dao = new ClienteDAO();
-//        dao.save(this);
+        if (!ClienteDAO.dontSaveTwice(this)) {
+            System.out.println("Don't save : " + ClienteDAO.dontSaveTwice(this));
+            ClienteDAO.save(this);
+        }
+        setIdCliente(ClienteDAO.getIdByReference(this));
     }
 
     public int getIdCliente() {

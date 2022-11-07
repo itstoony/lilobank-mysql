@@ -1,5 +1,6 @@
 package br.com.tony.model.contas;
 
+import br.com.tony.configuration.dao.ContaDAO;
 import br.com.tony.excecoes.SaldoInsuficienteException;
 import br.com.tony.model.cliente.Cliente;
 
@@ -15,7 +16,7 @@ public abstract class Conta extends Object  {
     private static final ArrayList<Conta> contas = new ArrayList<>();
 
 
-    public Conta(int agencia, int conta){
+    public Conta(int agencia, int conta, Cliente titular){
         /**
          * Construtor de conta a partir de parâmetros "agencia" e "conta"
          * @param agencia
@@ -23,6 +24,11 @@ public abstract class Conta extends Object  {
          */
             this.agencia = agencia;
             this.numeroDeConta = conta;
+            this.titular = titular;
+            if (!ContaDAO.dontSaveTwice(this)) {
+                System.out.println("Don't save : " + ContaDAO.dontSaveTwice(this));
+                ContaDAO.save(this);
+            }
     }
 
     public void setTitular(Cliente titular) {
@@ -45,7 +51,7 @@ public abstract class Conta extends Object  {
 
     public void saca (double valor) throws SaldoInsuficienteException {
         /**
-         * Valor precisa ser maior que valor
+         * Valor precisa ser maior de saque
          * @param valor
          * @throws SaldoInsuficienteException
          */
@@ -140,6 +146,11 @@ public abstract class Conta extends Object  {
          * retorna o total de contas no ArrayList de contas
          */
         return "Total de contas: " + contas.size();
+    }
+
+    public String getTipoConta(){
+        String tipo = "Conta padrão";
+        return tipo;
     }
 
 }
