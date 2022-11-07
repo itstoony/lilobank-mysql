@@ -4,10 +4,12 @@ import br.com.tony.configuration.dao.ContaDAO;
 import br.com.tony.excecoes.SaldoInsuficienteException;
 import br.com.tony.model.cliente.Cliente;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class Conta extends Object  {
+public abstract class Conta extends Object implements Serializable {
 
+    private static final long serialVersionUID = 1L;
 
     protected double saldo; // protected, disponível apenas para filhos
     private int agencia;
