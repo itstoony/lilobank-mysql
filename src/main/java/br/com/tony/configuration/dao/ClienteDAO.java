@@ -18,33 +18,30 @@ public class ClienteDAO {
      */
     public static void save(Cliente cliente) {
 
-        /**
-         * method to save clients in database
-         * @param reference to client
+        /*
+          method to save clients in database
+          @param reference to client
          */
         String sql = "INSERT INTO clientes (nome, cpf, profissao, dataCadastro) VALUES (?, ?, ?, ?)";
 
         Connection conn = null;
-
-        PreparedStatement ptsm = null;
-        ResultSet rset = null;
+        PreparedStatement pstm = null;
 
         try {
             conn = ConnectionFactory.createConnectionToMySQL();
-            ptsm = conn.prepareStatement(sql);
-            ptsm.setString(1, cliente.getNome());
-            ptsm.setString(2, cliente.getCpf());
-            ptsm.setString(3, cliente.getProfissao());
-            ptsm.setDate(4, new Date(cliente.getDataCadastro().getTime()));
-            ptsm.execute();
-//            cliente.setIdCliente(rset.getInt("id"));
+            pstm = conn.prepareStatement(sql);
+            pstm.setString(1, cliente.getNome());
+            pstm.setString(2, cliente.getCpf());
+            pstm.setString(3, cliente.getProfissao());
+            pstm.setDate(4, new Date(cliente.getDataCadastro().getTime()));
+            pstm.execute();
             System.out.println("Cliente salvo com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
-                if (ptsm != null) {
-                    ptsm.close();
+                if (pstm != null) {
+                    pstm.close();
                 }
                 if (conn != null) {
                     conn.close();
@@ -131,14 +128,12 @@ public class ClienteDAO {
 
     }
 
-    public static List<Cliente> getClientes() {
+    public static void getClientes() {
         /**
          * search for all client in database
          * @return arraylist with all clients
          */
         String sql = "SELECT * FROM clientes";
-
-        List<Cliente> clientes = new ArrayList<>();
 
         Connection conn = null;
         PreparedStatement pstm = null;
@@ -174,10 +169,9 @@ public class ClienteDAO {
                 e.printStackTrace();
             }
         }
-        return clientes;
     }
 
-    public static List<Cliente> getClienteByName(String nome) {
+    public static Cliente getClienteByName(String nome) {
         /**
          * search for client in database using the client's name as reference
          * @param name
@@ -187,21 +181,20 @@ public class ClienteDAO {
 
         String sql = "select * from clientes where nome = ? ";
 
-        List<Cliente> cliente = new ArrayList<>();
+
         Connection conn = null;
         PreparedStatement pstm = null;
         ResultSet rset = null;
-
+        Cliente cliente = null;
         try {
             conn = ConnectionFactory.createConnectionToMySQL();
             pstm = conn.prepareStatement(sql);
             pstm.setString(1, nome);
             rset = pstm.executeQuery();
             while (rset.next()) {
-                Cliente c = new Cliente(rset.getString("nome"), rset.getString("cpf"), rset.getString("profissao"));
-                c.setIdCliente(rset.getInt("id"));
-                c.setDataCadastro(rset.getDate("dataCadastro"));
-                cliente.add(c);
+                cliente = new Cliente(rset.getString("nome"), rset.getString("cpf"), rset.getString("profissao"));
+                cliente.setIdCliente(rset.getInt("id"));
+                cliente.setDataCadastro(rset.getDate("dataCadastro"));
             }
 
         } catch (Exception e) {
@@ -226,7 +219,7 @@ public class ClienteDAO {
         return cliente;
     }
 
-    public static List<Cliente> getClienteById(int id) {
+    public static Cliente getClienteById(int id) {
 
         /**
          * search for client in database using the id as reference
@@ -234,7 +227,7 @@ public class ClienteDAO {
          * @return arraylist with clients by id
          */
         String sql = "SELECT * FROM clientes WHERE id = ?";
-        List<Cliente> clients = new ArrayList<>();
+        Cliente cliente = null;
         Connection conn = null;
         PreparedStatement pstm = null;
         ResultSet rset = null;
@@ -245,10 +238,9 @@ public class ClienteDAO {
             pstm.setInt(1, id);
             rset = pstm.executeQuery();
             while (rset.next()) {
-                Cliente result = new Cliente(rset.getString("nome"), rset.getString("cpf"), rset.getString("profissao"));
-                result.setIdCliente(rset.getInt("id"));
-                result.setDataCadastro(rset.getDate("dataCadastro"));
-                clients.add(result);
+                cliente = new Cliente(rset.getString("nome"), rset.getString("cpf"), rset.getString("profissao"));
+                cliente.setIdCliente(rset.getInt("id"));
+                cliente.setDataCadastro(rset.getDate("dataCadastro"));
             }
 
         } catch (Exception e) {
@@ -270,7 +262,7 @@ public class ClienteDAO {
             }
 
         }
-        return clients;
+        return cliente;
     }
 
     public static int getIdByReference(Cliente cliente) {

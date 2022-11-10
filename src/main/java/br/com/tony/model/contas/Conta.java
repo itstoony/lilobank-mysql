@@ -6,16 +6,24 @@ import br.com.tony.model.cliente.Cliente;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Conta extends Object implements Serializable {
 
+    /**
+     * Modelo padrão de conta
+     * @author tony
+     */
+
     private static final long serialVersionUID = 1L;
+
+
 
     protected double saldo; // protected, disponível apenas para filhos
     private int agencia;
     private int numeroDeConta;
     private Cliente titular;
-    private static final ArrayList<Conta> contas = new ArrayList<>();
+    private static final List<Conta> contas = new ArrayList<>();
 
 
     public Conta(int agencia, int conta, Cliente titular){
@@ -23,6 +31,7 @@ public abstract class Conta extends Object implements Serializable {
          * Construtor de conta a partir de parâmetros "agencia" e "conta"
          * @param agencia
          * @param conta
+         * @param cliente object
          */
             this.agencia = agencia;
             this.numeroDeConta = conta;
@@ -125,10 +134,10 @@ public abstract class Conta extends Object implements Serializable {
         /**
          * Returns tipo da conta, número e agência
          */
-        return  "Número: " + this.numeroDeConta + ", Agência: " + this.agencia + " Cliente: " + this.getTitular().getNome()+ "\n";
+        return  "Número: " + this.numeroDeConta + ", Agência: " + this.agencia + ", Cliente: " + this.getTitular().getNome()+ "\n";
     }
 
-    protected void addContas(Conta a){
+    public static void addContas(Conta a){
         /**
          * Adiciona conta ao Array de contas através da referência
          * @param reference
@@ -136,12 +145,15 @@ public abstract class Conta extends Object implements Serializable {
         contas.add(a);
     }
 
-    public static ArrayList<Conta> getContas() {
+    public static List<Conta> getContas() {
         /**
          * Array que guarda todas as contas por referência
+         * @return unmodifiableList
          */
+        ContaDAO.getContas();
         return contas;
     }
+
 
     public static String totalContas(){
         /**

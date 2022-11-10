@@ -1,17 +1,19 @@
 package br.com.tony.model.contas;
 
+import br.com.tony.configuration.dao.ContaDAO;
 import br.com.tony.excecoes.SaldoInsuficienteException;
 import br.com.tony.model.cliente.Cliente;
 import br.com.tony.model.extra.Tributavel;
-
-import java.util.Comparator;
 
 public class ContaCorrente extends Conta implements Tributavel {
 
     public ContaCorrente(int agencia, int conta, Cliente titular) {
             super(agencia, conta, titular);
-            super.addContas(this);
-            super.getContas().sort(Comparator.comparingInt(Conta::getNumeroDeConta));
+            if (!ContaDAO.dontSaveTwice(this)) {
+                System.out.println("Don't save : " + ContaDAO.dontSaveTwice(this));
+                ContaDAO.save(this);
+            }
+//            getContas().sort(Comparator.comparingInt(Conta::getNumeroDeConta));
     }
 
     @Override

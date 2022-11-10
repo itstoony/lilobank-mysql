@@ -1,15 +1,16 @@
 package br.com.tony.model.contas;
 
 import br.com.tony.model.cliente.Cliente;
-import br.com.tony.model.extra.OrdenaLista;
+
+import java.util.Comparator;
 
 public class ContaPoupanca extends Conta {
 
 
     public ContaPoupanca(int agencia, int conta, Cliente cliente){
         super(agencia, conta, cliente);
-        super.addContas(this);
-        super.getContas().sort(new OrdenaLista());
+        addContas(this);
+        getContas().sort(Comparator.comparingInt(Conta::getNumeroDeConta));
     }
 
     @Override

@@ -2,11 +2,14 @@ package br.com.tony.model.cliente;
 
 import br.com.tony.configuration.dao.ClienteDAO;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Cliente {
+public class Cliente implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Modelo de classe para representar um Cliente
@@ -42,23 +45,12 @@ public class Cliente {
         this.idCliente = idCliente;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
     public String getCpf() {
         return cpf;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public String getNome() {
         return nome;
-    }
-
-    public void setProfissao(String profissao) {
-        this.profissao = profissao;
     }
 
     public String getProfissao() {
@@ -78,20 +70,13 @@ public class Cliente {
         return totalClientes;
     }
 
-    public static List<Cliente> getClientesReal(){
-        return totalClientes;
-    }
     public static void addTotalClientes(Cliente c){
         totalClientes.add(c);
     }
 
-    public static void addClienteDatabase(Cliente c){
-        ClienteDAO.save(c);
-    }
-
     @Override
     public String toString() {
-        return "Id: " + this.idCliente + ", Nome: " + this.nome + ", Profissão: "
+        return   "Id: " + this.idCliente + ", Nome: " + this.nome + ", Profissão: "
                 + this.getProfissao()+ ", CPF: " + this.getCpf() + ", Data de Cadastro: " + this.getDataCadastro() +  "\n";
     }
 
